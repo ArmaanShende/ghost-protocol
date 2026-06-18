@@ -41,3 +41,18 @@ Create a `.env` file in `/server` based on `.env.example`
 
 ## Live Demo
 _Coming soon_
+
+
+## Roadmap
+
+### v1 (Current)
+- [x] User authentication with JWT
+- [ ] Public post feed
+- [ ] Upvote / downvote posts
+- [ ] Anonymous messaging
+- [ ] Deployment
+
+### v2 (Planned)
+- [ ] Nested comments with cascading delete
+- [ ] Cursor-based pagination for posts feed
+- [ ] Image upload support via Cloudinary
