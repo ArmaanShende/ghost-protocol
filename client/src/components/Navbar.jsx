@@ -1,52 +1,65 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function Navbar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleLogout = () => {
     logout()
     navigate('/')
   }
 
+  const isActive = (path) => location.pathname === path
+
+  const navLinkClass = (path) =>
+    `px-3 py-1.5 rounded-md text-sm transition ${
+      isActive(path)
+        ? 'bg-white/10 text-white'
+        : 'text-slate-400 hover:text-white hover:bg-white/5'
+    }`
+
   return (
-    <nav className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 sticky top-0 z-10">
-      <div className="max-w-4xl mx-auto flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold tracking-tight text-white hover:opacity-80 transition">
+    <nav className="sticky top-0 z-20 backdrop-blur-xl bg-slate-950/60 border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+        <Link
+          to="/"
+          className="text-lg font-bold tracking-tight text-white hover:opacity-90 transition"
+        >
           <span className="text-purple-500">/</span> Ghost Protocol
         </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1">
           {user ? (
             <>
-              <Link to="/feed" className="hover:text-purple-400 transition">
+              <Link to="/feed" className={navLinkClass('/feed')}>
                 Feed
               </Link>
-              <Link to="/inbox" className="hover:text-purple-400 transition">
+              <Link to="/inbox" className={navLinkClass('/inbox')}>
                 Inbox
               </Link>
               <Link
                 to={`/u/${user.username}`}
-                className="hover:text-purple-400 transition"
+                className={navLinkClass(`/u/${user.username}`)}
               >
                 Profile
               </Link>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition"
+                className="ml-2 px-3 py-1.5 rounded-md text-sm text-slate-400 hover:text-white hover:bg-white/5 transition"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="hover:text-purple-400 transition">
+              <Link to="/login" className={navLinkClass('/login')}>
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm transition"
+                className="ml-2 px-3 py-1.5 rounded-md text-sm bg-white/10 hover:bg-white/15 text-white border border-white/10 transition"
               >
                 Register
               </Link>

@@ -50,7 +50,7 @@ function Feed() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 py-12">
       {user && (
         <form
           onSubmit={handleCreatePost}
