@@ -27,8 +27,8 @@ function Login() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
+    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
+      <div className="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-xl shadow-2xl">
         <h1 className="text-3xl font-bold mb-6 text-center">Welcome Back</h1>
 
         {error && (
@@ -45,7 +45,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-purple-500"
+              className="w-full px-3 py-2 bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:border-purple-500 transition"
             />
           </div>
 
@@ -56,20 +56,20 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-purple-500"
+              className="w-full px-3 py-2 bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:border-purple-500 transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 py-2 rounded font-semibold transition"
+            className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 py-2 rounded-lg font-semibold transition"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-400">
+        <p className="mt-4 text-center text-sm text-slate-400">
           Don't have an account?{' '}
           <Link to="/register" className="text-purple-400 hover:underline">
             Register

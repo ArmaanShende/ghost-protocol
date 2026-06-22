@@ -121,7 +121,8 @@ const votePost = async (req, res) => {
     }
 
     await post.save()
-    res.json(post)
+    const updatedPost = await Post.findById(post._id).populate('author', 'username')
+    res.json(updatedPost)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
