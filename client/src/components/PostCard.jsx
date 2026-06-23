@@ -2,9 +2,12 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 
-function PostCard({ post, onVote, onDelete }) {
+function PostCard({ post, onVote, onDelete, onUpdate }) {
   const { user } = useAuth()
   const [voting, setVoting] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editContent, setEditContent] = useState(post.content)
+  const [saving, setSaving] = useState(false)
 
   const isAuthor = user && user._id === post.author?._id
   const hasUpvoted = user && post.upvotes.includes(user._id)
@@ -32,6 +35,28 @@ function PostCard({ post, onVote, onDelete }) {
     } catch (err) {
       console.error('Delete failed')
     }
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editContent.trim() || editContent === post.content) {
+      setIsEditing(false)
+      return
+    }
+    setSaving(true)
+    try {
+      const res = await api.patch(`/posts/${post._id}`, { content: editContent })
+      onUpdate(res.data)
+      setIsEditing(false)
+    } catch (err) {
+      console.error('Update failed')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditContent(post.content)
+    setIsEditing(false)
   }
 
   const timeAgo = (date) => {
@@ -80,11 +105,49 @@ function PostCard({ post, onVote, onDelete }) {
             </>
           )}
         </div>
-        <p className="text-slate-100 whitespace-pre-wrap break-words">
-          {post.content}
-        </p>
-        {isAuthor && (
-          <div className="mt-3 flex justify-end">
+
+        {isEditing ? (
+          <div>
+            <textarea
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+              maxLength={500}
+              rows={3}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 focus:outline-none focus:border-purple-500 transition resize-none"
+            />
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-xs text-slate-500">{editContent.length}/500</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleCancelEdit}
+                  className="text-xs text-slate-400 hover:text-white transition px-3 py-1"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  disabled={saving}
+                  className="bg-purple-600 hover:bg-purple-700 disabled:opacity-50 px-3 py-1 rounded-lg text-xs font-semibold transition"
+                >
+                  {saving ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-slate-100 whitespace-pre-wrap break-words">
+            {post.content}
+          </p>
+        )}
+
+        {isAuthor && !isEditing && (
+          <div className="mt-3 flex justify-end gap-3">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="text-xs text-slate-400 hover:text-white transition"
+            >
+              Edit
+            </button>
             <button
               onClick={handleDelete}
               className="text-xs text-red-400 hover:text-red-300 transition"

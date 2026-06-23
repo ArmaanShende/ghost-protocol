@@ -49,6 +49,10 @@ function Feed() {
     setPosts(posts.filter((p) => p._id !== deletedId))
   }
 
+  const handleUpdate = (updatedPost) => {
+    setPosts(posts.map((p) => (p._id === updatedPost._id ? updatedPost : p)))
+  }
+
   return (
     <div className="max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 py-12">
       {user && (
@@ -89,6 +93,7 @@ function Feed() {
               post={post}
               onVote={handleVote}
               onDelete={handleDelete}
+              onUpdate={handleUpdate}
             />
           ))}
         </div>
